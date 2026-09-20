@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light" />
+  <meta name="theme-color" content="#0b1220" />
+  <title>Dashboard Financeiro</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand-block">
+        <div class="eyebrow">FINANÇAS PESSOAIS</div>
+        <h1>Dashboard Financeiro</h1>
+        <p class="subtitle">Acompanhe renda, gastos, saldo e comportamento das contas ao longo do tempo.</p>
+      </div>
+      <div class="header-meta">
+        <div class="data-status">
+          <span class="status-dot" aria-hidden="true"></span>
+          <span id="lastUpdate">Dados carregados</span>
+        </div>
+        <button id="resetFilters" class="secondary-button" type="button">Redefinir filtros</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="filter-panel" aria-labelledby="periodo-title">
+        <div class="section-heading compact-heading">
+          <div>
+            <span class="section-kicker">PERÍODO</span>
+            <h2 id="periodo-title">Filtros do dashboard</h2>
+          </div>
+          <div id="selectionSummary" class="selection-summary" aria-live="polite"></div>
+        </div>
+
+        <div class="filter-group">
+          <div class="filter-label-row">
+            <span class="filter-label">Ano</span>
+            <span class="filter-helper">Selecione um ou mais anos</span>
+          </div>
+          <div id="yearFilters" class="chip-row" aria-label="Filtro de ano"></div>
+        </div>
+
+        <div class="filter-group">
+          <div class="filter-label-row">
+            <span class="filter-label">Mês</span>
+            <span class="filter-helper">Usado nos totais e no gráfico de renda x gasto</span>
+          </div>
+          <div id="monthFilters" class="chip-row month-row" aria-label="Filtro de mês"></div>
+        </div>
+      </section>
+
+      <section class="overview-section" aria-labelledby="overview-title">
+        <div class="section-heading">
+          <div>
+            <span class="section-kicker">VISÃO GERAL</span>
+            <h2 id="overview-title">Resumo do período selecionado</h2>
+          </div>
+          <p class="section-note">Os quatro indicadores abaixo respeitam ano e mês.</p>
+        </div>
+        <div id="summaryKpis" class="summary-kpi-grid"></div>
+      </section>
+
+      <section class="charts-grid" aria-label="Gráficos financeiros">
+        <article class="panel line-panel">
+          <div class="panel-head">
+            <div>
+              <span class="section-kicker">EVOLUÇÃO MENSAL</span>
+              <h2>Contas ao longo do ano</h2>
+              <p>Os 12 meses permanecem no eixo. Use anos acima e contas abaixo para comparar.</p>
+            </div>
+            <div class="panel-badge">Linha</div>
+          </div>
+
+          <div class="account-filter-wrap">
+            <div class="filter-label-row">
+              <span class="filter-label">Contas exibidas</span>
+              <span id="accountSelectionText" class="filter-helper"></span>
+            </div>
+            <div id="accountFilters" class="chip-row account-row" aria-label="Contas do gráfico de linha"></div>
+          </div>
+
+          <div class="chart-wrap chart-wrap-line">
+            <canvas id="lineChart" aria-label="Gráfico de linha das contas por mês" role="img"></canvas>
+          </div>
+        </article>
+
+        <article class="panel bar-panel">
+          <div class="panel-head">
+            <div>
+              <span class="section-kicker">FLUXO FINANCEIRO</span>
+              <h2>Renda x gasto</h2>
+              <p>Totais acumulados para os meses e anos selecionados.</p>
+            </div>
+            <div class="panel-badge">Barras</div>
+          </div>
+
+          <div class="bar-stat-strip">
+            <div>
+              <span>Diferença</span>
+              <strong id="barDifference">—</strong>
+            </div>
+            <div>
+              <span>Relação gasto/renda</span>
+              <strong id="expenseRatio">—</strong>
+            </div>
+          </div>
+
+          <div class="chart-wrap chart-wrap-bar">
+            <canvas id="barChart" aria-label="Gráfico de barras comparando renda e gasto" role="img"></canvas>
+          </div>
+        </article>
+      </section>
+
+      <section class="accounts-section" aria-labelledby="accounts-title">
+        <div class="section-heading">
+          <div>
+            <span class="section-kicker">MÉDIA POR CONTA</span>
+            <h2 id="accounts-title">KPIs das despesas mensais</h2>
+          </div>
+          <p class="section-note">Estes cards respondem ao filtro de <strong>ano</strong>, mantendo todos os meses disponíveis.</p>
+        </div>
+        <div id="accountKpis" class="account-kpi-grid"></div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>Dashboard estático em JavaScript • pronto para GitHub Pages</span>
+      <span id="recordCount"></span>
+    </footer>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
