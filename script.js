@@ -144,14 +144,30 @@ function render(){
       tooltip:{callbacks:{label:ctx=>ctx.label+': '+fmt(ctx.parsed)}}}}});
 }
 
+async function loadDefaultSpreadsheet(){
+  const candidates=[
+    {url:'Financ%CC%A7as.xlsx',label:'Finanças.xlsx'},
+    {url:'Finan%C3%A7as.xlsx',label:'Finanças.xlsx'}
+  ];
+
+  let lastError=null;
+  for(const candidate of candidates){
+    try{
+      const response=await fetch(candidate.url,{cache:'no-store'});
+      if(!response.ok) throw new Error('arquivo não encontrado ('+response.status+')');
+      const ab=await response.arrayBuffer();
+      loadData(ab,candidate.label);
+      return;
+    }catch(error){
+      lastError=error;
+    }
+  }
+
+  setStatus('Não deu para carregar Finanças.xlsx automaticamente ('+(lastError?.message||'erro desconhecido')+'). Se estiver abrindo o arquivo localmente, use um servidor local ou selecione a planilha ao lado.');
+}
+
 setStatus('Carregando Finanças.xlsx…');
-fetch('Finanças.xlsx').then(r=>{
-  if(!r.ok) throw new Error('arquivo não encontrado ('+r.status+')');
-  return r.arrayBuffer();
-}).then(ab=>loadData(ab,'Finanças.xlsx'))
-  .catch(e=>{
-    setStatus('Não deu para carregar Finanças.xlsx automaticamente ('+e.message+'). Isso é normal se você abriu o index.html direto (duplo clique) — sirva a pasta com um servidor local, ou selecione o arquivo ao lado.');
-  });
+loadDefaultSpreadsheet();
 
 document.getElementById('fileInput').addEventListener('change',ev=>{
   const file=ev.target.files[0];
